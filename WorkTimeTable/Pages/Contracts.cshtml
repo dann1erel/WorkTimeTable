@@ -7,16 +7,32 @@
     <tr><th>ID</th><th>Название</th></tr>
     @foreach (var contract in Model.Contracts)
     {
-        <tr><td>@contract.Id</td><td>@contract.Name</td></tr>
+        <tr>
+            <td>@contract.Id</td>
+            <td>@contract.Name</td>
+            <td>
+                <form method="post" asp-page-handler="Edit">
+                    <input type="hidden" name="id" value="@contract.Id" />
+                    <input name="name" value="@contract.Name"/>
+                    <input type="submit" value="Изменить" />
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-page-handler="Remove"> 
+                    <input type="hidden" name="id" value="@contract.Id"/>
+                    <input type="submit" value="Удалить"/>
+                </form>
+            </td>
+        </tr>
     }
 </table>
 
-<text>Вставить</text>
+<text>Добавить новый договор</text>
 
-<form method="post">
+<form method="post" asp-page-handler="Add">
     <p>
         <label>Название</label><br />
-        <input name="name" />
+        <input name="name"/>
     </p>
     <input type="submit" value="Отправить" />
 </form>

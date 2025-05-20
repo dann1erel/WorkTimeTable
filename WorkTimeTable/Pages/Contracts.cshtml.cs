@@ -20,12 +20,34 @@ namespace WorkTimeTable.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostAddAsync()
         {
             db.Contract.Add(Contract);
             await db.SaveChangesAsync();
             return RedirectToPage();
         }
 
+        public async Task<IActionResult> OnPostRemoveAsync(int id)
+        {
+            var contract = await db.Contract.FindAsync(id);
+            if (contract != null)
+            {
+                db.Contract.Remove(contract);
+                await db.SaveChangesAsync();
+            }
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostEditAsync(int id, string name)
+        {
+            var contract = await db.Contract.FindAsync(id);
+            if (contract != null)
+            {
+                contract.Name = name;
+                db.Contract.Update(contract);
+                await db.SaveChangesAsync();
+            }
+            return RedirectToPage();
+        }
     }
 }
