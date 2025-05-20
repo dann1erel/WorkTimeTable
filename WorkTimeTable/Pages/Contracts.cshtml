@@ -1,0 +1,22 @@
+﻿@page
+@model WorkTimeTable.Pages.ContractsModel
+@{
+}
+<text>Здесь будут договоры</text>
+<table>
+    <tr><th>ID</th><th>Название</th></tr>
+    @foreach (var contract in Model.Contracts)
+    {
+        <tr><td>@contract.Id</td><td>@contract.Name</td></tr>
+    }
+</table>
+
+<text>Вставить</text>
+
+<form method="post">
+    <p>
+        <label>Название</label><br />
+        <input name="name" />
+    </p>
+    <input type="submit" value="Отправить" />
+</form>

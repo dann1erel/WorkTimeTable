@@ -10,14 +10,10 @@ namespace WorkTimeTable.DataBase
         public DbSet<Timetable> Timetable { get; set; } = null!;
         public DbSet<DepartmentHierarchy> DepartmentHierarchy { get; set; } = null!;
 
-        public ApplicationContext()
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options)
         {
             Database.EnsureCreated();
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=DANIL;Database=WorkTimetableDB;Trusted_Connection=True;Encrypt=no");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
