@@ -3,5 +3,43 @@
 @{
 }
 
-<h1>Здесь будут все работники и кнопки добавить работника, удалить работника и изменить работника, и ещё может быть что-то</h1>
+<text>Здесь будут работники</text>
+<table>
+    <tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Отдел</th></tr>
+    @foreach (var worker in Model.Workers)
+    {
+        <tr>
+            <td>@worker.Id</td>
+            <td>@worker.Name</td>
+            <td>@worker.Position</td>
+            <td>@worker.Department?.Name</td>
+            <td>
+                <form method="post" asp-page-handler="Edit">
+                    <input type="hidden" name="id" value="@worker.Id"/>
+                    <input name="name" value="@worker.Name" />
+                    <input name="position" value="@worker.Position" />
+                    @*<input name="department" value="@worker.Department" />  сделать выпадающим списком *@
+                    <input type="submit" value="Изменить" />
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-page-handler="Remove">
+                    <input type="hidden" name="id" value="@worker.Id" />
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<text>Вставить</text>
+
+<form method="post" asp-page-handler="Add">
+    <p>
+        <input name="name" placeholder="имя"/>
+        <input name="position" placeholder="должность" />
+        @* <input name="department" placeholder="отдел" />  сделать выпадающим списком *@
+    </p>
+    <input type="submit" value="Отправить" />
+</form>
 
