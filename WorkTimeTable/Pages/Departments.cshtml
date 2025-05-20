@@ -1,0 +1,41 @@
+﻿@page
+@model WorkTimeTable.Pages.DepartmentsModel
+@{
+}
+
+<text>Здесь будут отделы</text>
+<table>
+    <tr><th>ID</th><th>Название</th><th>Руководитель</th></tr>
+    @foreach (var department in Model.Departments)
+    {
+        <tr>
+            <td>@department.Id</td>
+            <td>@department.Name</td>
+            <td>@department.Leader?.Name</td>
+            <td>
+                <form method="post" asp-page-handler="Edit">
+                    <input type="hidden" name="id" value="@department.Id" />
+                    <input name="name" value="@department.Name" />
+                    @*<input name="department" value="@department.Leader" />  сделать выпадающим списком *@
+                    <input type="submit" value="Изменить" />
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-page-handler="Remove">
+                    <input type="hidden" name="id" value="@department.Id" />
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<text>Вставить</text>
+
+<form method="post" asp-page-handler="Add">
+    <p>
+        <input name="name" placeholder="название" />
+        @* <input name="leader" placeholder="руководитель" />  сделать выпадающим списком *@
+    </p>
+    <input type="submit" value="Отправить" />
+</form>
