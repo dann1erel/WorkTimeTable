@@ -19,7 +19,9 @@
                     <input type="hidden" name="id" value="@worker.Id"/>
                     <input name="name" value="@worker.Name" />
                     <input name="position" value="@worker.Position" />
-                    <select name="departmentId" asp-items="Model.Options"></select>
+                    <select name="departmentId" asp-items="Model.Options">
+                        <option value="@null">Нет отдела</option>
+                    </select>
                     <input type="submit" value="Изменить" />
                 </form>
             </td>
@@ -39,7 +41,9 @@
     <p>
         <input name="name" placeholder="имя"/>
         <input name="position" placeholder="должность" />
-        <select name="departmentId" asp-items="Model.Options"></select>
+        <select name="departmentId" asp-items="Model.Options">
+            <option value="@null">Нет Отдела</option>
+        </select>
     </p>
     <input type="submit" value="Отправить" />
 </form>

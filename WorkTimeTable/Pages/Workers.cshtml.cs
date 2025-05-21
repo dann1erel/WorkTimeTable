@@ -49,7 +49,7 @@ namespace WorkTimeTable.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostEditAsync(int id, string name, string position, int departmentId)
+        public async Task<IActionResult> OnPostEditAsync(int id, string name, string position, int? departmentId)
         {
             var worker = await db.Worker.FindAsync(id);
             if (worker != null)

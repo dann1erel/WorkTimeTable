@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using WorkTimeTable.DataBase;
 
 namespace WorkTimeTable.Pages
@@ -48,7 +47,7 @@ namespace WorkTimeTable.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostEditAsync(int id, string name, int leaderId) // добавить leader
+        public async Task<IActionResult> OnPostEditAsync(int id, string name, int? leaderId) // добавить leader
         {
             var department = await db.Department.FindAsync(id);
             if (department != null)

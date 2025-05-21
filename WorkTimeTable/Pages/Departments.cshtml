@@ -17,7 +17,9 @@
                 <form method="post" asp-page-handler="Edit">
                     <input type="hidden" name="id" value="@department.Id" />
                     <input name="name" value="@department.Name" />
-                    <select name="leaderId" asp-items="Model.Options"></select>
+                    <select name="leaderId" asp-items="Model.Options">
+                        <option value="@null">Нет Руководителя</option>
+                    </select>
                     <input type="submit" value="Изменить" />
                 </form>
             </td>
@@ -36,7 +38,9 @@
 <form method="post" asp-page-handler="Add">
     <p>
         <input name="name" placeholder="название" />
-        <select name="leaderId" asp-items="Model.Options"></select>
+        <select name="leaderId" asp-items="Model.Options">
+            <option value="@null">Нет Руководителя</option>
+        </select>
     </p>
     <input type="submit" value="Отправить" />
 </form>
