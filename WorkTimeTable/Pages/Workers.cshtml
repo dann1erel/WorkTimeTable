@@ -9,11 +9,12 @@
     <tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Отдел</th></tr>
     @foreach (var worker in Model.Workers)
     {
+        string departmentName = worker.Department?.Name ?? "Нет отдела";
         <tr>
             <td>@worker.Id</td>
             <td>@worker.Name</td>
             <td>@worker.Position</td>
-            <td>@worker.Department?.Name</td>
+            <td>@departmentName</td>
             <td>
                 <form method="post" asp-page-handler="Edit">
                     <input type="hidden" name="id" value="@worker.Id"/>
