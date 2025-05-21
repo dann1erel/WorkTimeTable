@@ -4,6 +4,7 @@
 }
 
 <text>Здесь будут отделы</text>
+<a asp-page="/Index">Домой</a>
 <table>
     <tr><th>ID</th><th>Название</th><th>Руководитель</th></tr>
     @foreach (var department in Model.Departments)
@@ -16,7 +17,7 @@
                 <form method="post" asp-page-handler="Edit">
                     <input type="hidden" name="id" value="@department.Id" />
                     <input name="name" value="@department.Name" />
-                    @*<input name="department" value="@department.Leader" />  сделать выпадающим списком *@
+                    <select name="leaderId" asp-items="Model.Options"></select>
                     <input type="submit" value="Изменить" />
                 </form>
             </td>
@@ -35,7 +36,7 @@
 <form method="post" asp-page-handler="Add">
     <p>
         <input name="name" placeholder="название" />
-        @* <input name="leader" placeholder="руководитель" />  сделать выпадающим списком *@
+        <select name="leaderId" asp-items="Model.Options"></select>
     </p>
     <input type="submit" value="Отправить" />
 </form>
