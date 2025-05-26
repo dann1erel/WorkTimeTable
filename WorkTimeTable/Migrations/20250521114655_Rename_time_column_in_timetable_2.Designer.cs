@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkTimeTable.DataBase;
 
@@ -10,9 +11,11 @@ using WorkTimeTable.DataBase;
 namespace WorkTimeTable.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250521114655_Rename_time_column_in_timetable_2")]
+    partial class Rename_time_column_in_timetable_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,17 +97,14 @@ namespace WorkTimeTable.Migrations
                     b.Property<int?>("Hours")
                         .HasColumnType("int");
 
-                    b.Property<string>("Month")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkerId")
+                    b.Property<int>("Workerid")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContractId");
 
-                    b.HasIndex("WorkerId");
+                    b.HasIndex("Workerid");
 
                     b.ToTable("Timetable");
                 });
@@ -164,7 +164,7 @@ namespace WorkTimeTable.Migrations
 
                     b.HasOne("WorkTimeTable.DataBase.Worker", "Worker")
                         .WithMany("Timetables")
-                        .HasForeignKey("WorkerId")
+                        .HasForeignKey("Workerid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

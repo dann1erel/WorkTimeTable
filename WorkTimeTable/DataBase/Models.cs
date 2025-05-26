@@ -76,12 +76,14 @@
     public class Timetable
     {
         public int Id { get; set; }
+        public int? Hours { get; set; }
+        public string? Month { get; set; } // рыба, заменить либо на enum, либо на datetime тип 
 
         // связь между таблицами
         public Contract Contract { get; set; } = null!; // навигационное свойство
         public int ContractId { get; set; } // внешний ключ
         public Worker Worker { get; set; } = null!; // навигационное свойство
-        public int Workerid { get; set; } // внешний ключ
+        public int WorkerId { get; set; } // внешний ключ
 
         public Timetable() { }
 

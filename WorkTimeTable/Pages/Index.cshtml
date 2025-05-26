@@ -1,8 +1,64 @@
-﻿@page
+﻿@page "{workerShowId?}/{monthShow?}"
 @model WorkTimeTable.Pages.IndexModel
-@{
-}
-<h1>Выработка сотрудника за месяц</h1>
+
+<a asp-page="/Index" asp-route-workerShowId="" asp-route-monthShow="">Главная</a>
 <a asp-page="/Workers">Работники</a>
 <a asp-page="/Contracts">Договоры</a>
 <a asp-page="/Departments">Отделы</a>
+
+<form method="post" asp-page-handler="ShowWorker">
+    <h1>
+        Выработка сотрудника 
+        <select name="workerShowId" asp-items="Model.OptionsWorkers">
+            <option value="@null">Выберите сотрудника</option>
+        </select>
+        за месяц 
+        <select name="monthShow" asp-items="Model.OptionsMonths">
+            <option value="@null">Выберите месяц</option>
+        </select>
+    </h1>
+    <button type="submit"> Показать </button> 
+</form>
+
+@if (Model.WorkerShowId != null && Model.MonthShow != null)
+{
+    <h1>Работник @Model.WorkerShowName. Месяц: @Model.MonthShow</h1>
+    <table>
+            <tr><th>Номер договора</th><th>Кол-во часов</th></tr>
+            @foreach(var timetable in Model.Timetables)
+            {
+                <tr>
+                    <th>@timetable.Contract.Name</th>
+                    <th>@timetable.Hours</th>
+                    <th>
+                        <form method="post" asp-page-handler="Edit">
+                            <input type="hidden" name="id" value="@timetable.Id"/>
+                            <input name="hours" value="@timetable.Hours"/> @* тут проверка на int *@
+                            <button type="submit">Изменить</button>
+                        </form>
+                    </th>
+                    <th>
+                        <form methof="post" asp-page-handler="Remove">
+                            <input type="hidden" name="id" value="@timetable.Id"/>
+                            <button type="submit">Удалить</button>
+                        </form>
+                    </th>
+                </tr>
+            }
+    </table>
+
+    <text>@Model.HoursByContract</text>
+
+    <form method="post" asp-page-handler="Add">
+        <p>
+            <select name="contractId" asp-items="Model.OptionsContracts">
+                <option value="@null">Выберите договор</option> @* тут проверка на null должна быть *@
+            </select>
+            <input name="hours" placeholder="Кол-во часов" /> @* тут проверка на int *@
+            <input type="hidden" name="workerId" value="@Model.WorkerShowId" />
+            <input type="hidden" name="month" value="@Model.MonthShow" />
+        </p>
+        <button type="submit">Добавить</button>
+    </form>
+}
+

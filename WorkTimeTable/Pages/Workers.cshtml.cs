@@ -31,7 +31,7 @@ namespace WorkTimeTable.Pages
 
             return Page();
         }
-        public async Task<IActionResult> OnPostAddAsync(int departmentId)
+        public async Task<IActionResult> OnPostAddAsync()
         {
             db.Worker.Add(Worker);
             await db.SaveChangesAsync();
@@ -55,7 +55,7 @@ namespace WorkTimeTable.Pages
             if (worker != null)
             {
                 worker.Name = name;
-                worker.Position = position; // можно сделать так: когда ставишь должность руководитель, то у отдела тоже ставится руководитель
+                worker.Position = position;
                 worker.DepartmentId = departmentId;
                 db.Worker.Update(worker);
                 await db.SaveChangesAsync();
