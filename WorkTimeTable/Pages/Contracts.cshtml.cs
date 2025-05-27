@@ -5,7 +5,6 @@ using WorkTimeTable.DataBase;
 
 namespace WorkTimeTable.Pages
 {
-    [IgnoreAntiforgeryToken]
     public class ContractsModel(ApplicationContext db) : PageModel
     {
         // для получения данных из бд
@@ -44,7 +43,6 @@ namespace WorkTimeTable.Pages
             if (contract != null)
             {
                 contract.Name = name;
-                db.Contract.Update(contract);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage();

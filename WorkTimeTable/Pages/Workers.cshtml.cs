@@ -6,7 +6,6 @@ using WorkTimeTable.DataBase;
 
 namespace WorkTimeTable.Pages
 {
-    [IgnoreAntiforgeryToken]
     public class WorkersModel(ApplicationContext db) : PageModel
     {
         // для получения данных из бд
@@ -14,7 +13,6 @@ namespace WorkTimeTable.Pages
         // для отправки данных в бд
         [BindProperty]
         public Worker Worker { get; set; } = new();
-
         // тег select
         public List<SelectListItem> Options { get; set; } = null!;
 
@@ -57,7 +55,6 @@ namespace WorkTimeTable.Pages
                 worker.Name = name;
                 worker.Position = position;
                 worker.DepartmentId = departmentId;
-                db.Worker.Update(worker);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage();

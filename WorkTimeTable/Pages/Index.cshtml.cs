@@ -1,10 +1,7 @@
-using System.Reflection.Metadata.Ecma335;
-using System.Xml;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using WorkTimeTable.DataBase;
 
 namespace WorkTimeTable.Pages
@@ -14,6 +11,7 @@ namespace WorkTimeTable.Pages
         [BindProperty(SupportsGet = true)]
         public int? WorkerShowId { get; set; }
         public string? WorkerShowName { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public string? MonthShow { get; set; }
         public int? HoursByContract { get; set; }
@@ -21,7 +19,25 @@ namespace WorkTimeTable.Pages
         public List<SelectListItem> OptionsWorkers { get; set; } = null!;
         public List<SelectListItem> OptionsContracts { get; set; } = null!;
         public SelectList OptionsMonths {  get; set; } = null!;
-        private static readonly string[] items = ["Май", "Июнь", "Июль"]; // заменить на что-то умное
+        private static readonly Dictionary<string, int> _months2Days = new Dictionary<string, int>()
+        {
+            {"Май", 18},
+            {"Июнь", 19},
+            {"Июль", 23},
+            {"Август", 21}
+        };
+        public int DaysInMonth
+        {
+            get
+            {
+                if(MonthShow != null && _months2Days.TryGetValue(MonthShow, out int d)) return d;
+                return 0;
+            }
+        }
+
+
+
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -33,9 +49,9 @@ namespace WorkTimeTable.Pages
                 .Include(t => t.Contract)
                 .Include(t => t.Worker)
                 .AsNoTracking()
-                .ToListAsync(); // группировка, чтобы выводилась сумма по одному документу
+                .ToListAsync();
 
-            HoursByContract = Timetables.Sum(t => t.Hours);
+            if (MonthShow != null) HoursByContract = _months2Days[MonthShow] * 8 - Timetables.Sum(t => t.Hours);
 
             WorkerShowName = await db.Worker
                 .Where(w => w.Id == WorkerShowId)
@@ -84,9 +100,12 @@ namespace WorkTimeTable.Pages
         public async Task<IActionResult> OnPostEditAsync(int id, int hours)
         {
             var timetable = await db.Timetable.FindAsync(id);
-            if (timetable != null) timetable.Hours = hours;
-            await db.SaveChangesAsync();
-
+            if (timetable != null) 
+            { 
+                timetable.Hours = hours;
+                await db.SaveChangesAsync();
+            }
+            
             return RedirectToPage("./Index", new { workerShowId = WorkerShowId, monthShow = MonthShow });
         }
 
@@ -112,8 +131,14 @@ namespace WorkTimeTable.Pages
                 .Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name })
                 .AsNoTracking()
                 .ToListAsync();
-            OptionsMonths = new SelectList(items); // заменить на что-нибудь более-умное
-        }
 
+            List<string> months = [];
+            foreach (var month in _months2Days)
+            {
+                months.Add(month.Key);
+            }
+
+            OptionsMonths = new SelectList(months); // заменить на что-нибудь более-умное
+        }
     }
 }

@@ -10,5 +10,6 @@ string? connection = builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
 
 var app = builder.Build();
+app.MapStaticAssets();
 app.MapRazorPages();
 app.Run();

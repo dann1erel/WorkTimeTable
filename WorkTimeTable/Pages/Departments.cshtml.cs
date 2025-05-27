@@ -6,7 +6,6 @@ using WorkTimeTable.DataBase;
 
 namespace WorkTimeTable.Pages
 {
-    [IgnoreAntiforgeryToken]
     public class DepartmentsModel(ApplicationContext db) : PageModel
     {
         // для получения данных из бд
@@ -54,7 +53,6 @@ namespace WorkTimeTable.Pages
             {
                 department.Name = name;
                 department.LeaderId = leaderId;
-                db.Department.Update(department);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage();

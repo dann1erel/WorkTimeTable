@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "5.3.6",
+    "jquery": "3.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.27.0"
+  }
+}

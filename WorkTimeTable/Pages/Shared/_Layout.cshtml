@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+
+<body>
+    <header>
+        <a asp-page="/Index" asp-route-workerShowId="" asp-route-monthShow="">Главная</a>
+        <a asp-page="/Workers">Работники</a>
+        <a asp-page="/Contracts">Договоры</a>
+        <a asp-page="/Departments">Отделы</a>
+    </header>
+    <div class="container py-4">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 ﻿@page
 @model WorkTimeTable.Pages.ContractsModel
 @{
+    ViewBag.Title = "Договоры";
 }
-<text>Здесь будут договоры</text>
-<a asp-page="/Index">Домой</a>
+
 <table>
     <tr><th>ID</th><th>Название</th></tr>
     @foreach (var contract in Model.Contracts)
@@ -14,14 +14,14 @@
             <td>
                 <form method="post" asp-page-handler="Edit">
                     <input type="hidden" name="id" value="@contract.Id" />
-                    <input name="name" value="@contract.Name"/>
-                    <input type="submit" value="Изменить" />
+                    <input name="name" value="@contract.Name"/> @* проверка на null *@
+                    <button type="submit">Изменить</button>
                 </form>
             </td>
             <td>
                 <form method="post" asp-page-handler="Remove"> 
                     <input type="hidden" name="id" value="@contract.Id"/>
-                    <input type="submit" value="Удалить"/>
+                    <button type="submit">Удалить</button>
                 </form>
             </td>
         </tr>
@@ -32,8 +32,7 @@
 
 <form method="post" asp-page-handler="Add">
     <p>
-        <label>Название</label><br />
-        <input name="name"/>
+        <input name="name" placeholder="Номер договора"/> @* проверка на null *@
     </p>
-    <input type="submit" value="Отправить" />
+    <button type="submit">Добавить</button>
 </form>
