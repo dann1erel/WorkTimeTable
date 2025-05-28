@@ -7,7 +7,7 @@
 }
 
 <form method="post" asp-page-handler="ShowWorker">
-    <h1>
+    <text>
         Выработка сотрудника 
         <select asp-for="WorkerShowId" 
                 asp-items="Model.OptionsWorkers" required>
@@ -18,13 +18,13 @@
                 asp-items="Model.OptionsMonths" required>
             <option value="" disabled selected>— Выберите Месяц —</option>
         </select>
-    </h1>
-    <button type="submit"> Показать </button> 
+    </text>
+    <button type="submit" class="btn btn-primary"> Показать </button>
 </form>
 
 @if (Model.WorkerShowId != null && Model.MonthShow != null)
 {
-    <table>
+    <table class="table table-striped table-bordered">
             <tr><th>Номер договора</th><th>Кол-во часов</th></tr>
             @foreach(var timetable in Model.Timetables)
             {
@@ -35,13 +35,13 @@
                         <form method="post" asp-page-handler="Edit">
                             <input type="hidden" name="id" value="@timetable.Id"/>
                             <input name="hours" type="number" step="1" min="0" value="@timetable.Hours" />
-                            <button type="submit">Изменить</button>
+                            <button type="submit" class="btn btn-light">Изменить</button>
                         </form>
                     </td>
                     <td>
                         <form methof="post" asp-page-handler="Remove">
                             <input type="hidden" name="id" value="@timetable.Id"/>
-                            <button type="submit">Удалить</button>
+                            <button type="submit" class="btn btn-danger">Удалить</button>
                         </form>
                     </td>
                 </tr>
@@ -61,6 +61,6 @@
             <input type="hidden" name="workerId" value="@Model.WorkerShowId" />
             <input type="hidden" name="month" value="@Model.MonthShow" />
         </p>
-        <button type="submit">Добавить</button>
+        <button type="submit" class="btn btn-success">Добавить</button>
     </form>
 }

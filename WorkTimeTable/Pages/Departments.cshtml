@@ -4,7 +4,7 @@
     ViewBag.Title = "Отделы";
 }
 
-<table>
+<table class="table table-striped table-bordered">
     <tr><th>ID</th><th>Название</th><th>Руководитель</th></tr>
     @foreach (var department in Model.Departments)
     {
@@ -20,13 +20,13 @@
                     <select name="leaderId" asp-items="Model.Options">
                         <option selected disabled>Нет Руководителя</option>
                     </select>
-                    <button type="submit">Изменить</button>
+                    <button type="submit" class="btn btn-light">Изменить</button>
                 </form>
             </td>
             <td>
                 <form method="post" asp-page-handler="Remove">
                     <input type="hidden" name="id" value="@department.Id" />
-                    <button type="submit">Удалить</button>
+                    <button type="submit" class="btn btn-danger">Удалить</button>
                 </form>
             </td>
         </tr>
@@ -42,5 +42,5 @@
             <option selected disabled>Нет Руководителя</option>
         </select>
     </p>
-    <button type="submit">Добавить</button>
+    <button type="submit" class="btn btn-success">Добавить</button>
 </form>
