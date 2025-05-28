@@ -13,7 +13,13 @@ namespace WorkTimeTable.Pages
         // для отправки данных в бд
         [BindProperty]
         public Department Department { get; set; } = new();
+
+        // для select
         public List<SelectListItem> Options { get; set; } = null!;
+
+        // для удаления с помощью чекбоксов
+        [BindProperty]
+        public List<int> AreChecked { get; set; } = [];
 
         public async Task<IActionResult> OnGet()
         {
@@ -35,12 +41,12 @@ namespace WorkTimeTable.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostRemoveAsync(int id)
+        public async Task<IActionResult> OnPostRemoveAsync()
         {
-            var department = await db.Department.FindAsync(id);
-            if (department != null)
+            var departmentsToDelete = await db.Department.Where(d => AreChecked.Contains(d.Id)).ToListAsync();
+            if (departmentsToDelete != null)
             {
-                db.Department.Remove(department);
+                db.Department.RemoveRange(departmentsToDelete);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage();

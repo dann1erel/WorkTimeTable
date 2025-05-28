@@ -10,11 +10,17 @@ namespace WorkTimeTable.Pages
     {
         // для получения данных из бд
         public List<Worker> Workers { get; private set; } = [];
+
         // для отправки данных в бд
         [BindProperty]
         public Worker Worker { get; set; } = new();
+
         // тег select
         public List<SelectListItem> Options { get; set; } = null!;
+
+        // для удаления с помощью чекбоксов
+        [BindProperty]
+        public List<int> AreChecked { get; set; } = [];
 
         public async Task<IActionResult> OnGet()
         {
@@ -36,12 +42,12 @@ namespace WorkTimeTable.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostRemoveAsync(int id)
+        public async Task<IActionResult> OnPostRemoveAsync()
         {
-            var worker = await db.Worker.FindAsync(id);
-            if (worker != null)
+            var workersToDelete = await db.Worker.Where(w => AreChecked.Contains(w.Id)).ToListAsync();
+            if (workersToDelete != null)
             {
-                db.Worker.Remove(worker);
+                db.Worker.RemoveRange(workersToDelete);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage();

@@ -4,29 +4,34 @@
     ViewBag.Title = "Договоры";
 }
 
-<table class="table table-striped table-bordered">
-    <tr><th>ID</th><th>Название</th></tr>
-    @foreach (var contract in Model.Contracts)
-    {
-        <tr>
-            <td>@contract.Id</td>
-            <td>@contract.Name</td>
-            <td>
-                <form method="post" asp-page-handler="Edit">
-                    <input type="hidden" name="id" value="@contract.Id" />
-                    <input name="name" value="@contract.Name"/> @* проверка на null *@
-                    <button type="submit" class="btn btn-light">Изменить</button>
-                </form>
-            </td>
-            <td>
-                <form method="post" asp-page-handler="Remove"> 
-                    <input type="hidden" name="id" value="@contract.Id"/>
-                    <button type="submit" class="btn btn-danger">Удалить</button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+<div class="container">
+
+    <table class="table table-striped table-bordered">
+        <tr><th>ID</th><th>Название</th></tr>
+        @foreach (var contract in Model.Contracts)
+        {
+            <tr>
+                <td>@contract.Id</td>
+                <td>@contract.Name</td>
+                <td>
+                    <form method="post" asp-page-handler="Edit">
+                        <input type="hidden" name="id" value="@contract.Id" />
+                        <input name="name" value="@contract.Name"/> @* проверка на null *@
+                        <button type="submit" class="btn btn-light">Изменить</button>
+                    </form>
+                </td>
+                <td>
+                    <input type="checkbox" name="AreChecked" value="@contract.Id" form="RemoveForm"/>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <form method="post" id="RemoveForm" asp-page-handler="Remove">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+
+</div>
 
 <text>Добавить новый договор</text>
 

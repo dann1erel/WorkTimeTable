@@ -13,6 +13,10 @@ namespace WorkTimeTable.Pages
         [BindProperty]
         public Contract Contract { get; set; } = new();
 
+        // для удаления с помощью чекбоксов
+        [BindProperty]
+        public List<int> AreChecked { get; set; } = [];
+
         public async Task<IActionResult> OnGet()
         {
             Contracts = await db.Contract.AsNoTracking().ToListAsync();
@@ -28,10 +32,10 @@ namespace WorkTimeTable.Pages
 
         public async Task<IActionResult> OnPostRemoveAsync(int id)
         {
-            var contract = await db.Contract.FindAsync(id);
-            if (contract != null)
+            var contractsToDelete = await db.Contract.Where(c => AreChecked.Contains(c.Id)).ToListAsync();
+            if (contractsToDelete != null)
             {
-                db.Contract.Remove(contract);
+                db.Contract.RemoveRange(contractsToDelete);
                 await db.SaveChangesAsync();
             }
             return RedirectToPage();

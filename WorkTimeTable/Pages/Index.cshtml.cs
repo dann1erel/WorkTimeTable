@@ -8,17 +8,21 @@ namespace WorkTimeTable.Pages
 {
     public class IndexModel(ApplicationContext db) : PageModel
     {
+        // параметры маршрута, потом формируется запрос к бд с такими параметрами
         [BindProperty(SupportsGet = true)]
         public int? WorkerShowId { get; set; }
-        public string? WorkerShowName { get; set; }
-
         [BindProperty(SupportsGet = true)]
         public string? MonthShow { get; set; }
-        public int? HoursByContract { get; set; }
+        
+        // для получения данных из бд
         public List<Timetable> Timetables { get; set; } = [];
+
+        // для тега select
         public List<SelectListItem> OptionsWorkers { get; set; } = null!;
         public List<SelectListItem> OptionsContracts { get; set; } = null!;
         public SelectList OptionsMonths {  get; set; } = null!;
+
+        // для контрольной суммы
         private static readonly Dictionary<string, int> _months2Days = new Dictionary<string, int>()
         {
             {"Май", 18},
@@ -34,10 +38,11 @@ namespace WorkTimeTable.Pages
                 return 0;
             }
         }
+        public int? HoursByContract { get; set; }
 
-
-
-
+        // для удаления с помощью чекбоксов
+        [BindProperty]
+        public List<int> AreChecked { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -52,11 +57,6 @@ namespace WorkTimeTable.Pages
                 .ToListAsync();
 
             if (MonthShow != null) HoursByContract = _months2Days[MonthShow] * 8 - Timetables.Sum(t => t.Hours);
-
-            WorkerShowName = await db.Worker
-                .Where(w => w.Id == WorkerShowId)
-                .Select(w => w.Name)
-                .FirstOrDefaultAsync();
 
             return Page();
         }
@@ -109,12 +109,12 @@ namespace WorkTimeTable.Pages
             return RedirectToPage("./Index", new { workerShowId = WorkerShowId, monthShow = MonthShow });
         }
 
-        public async Task<IActionResult> OnPostRemoveAsync(int id)
+        public async Task<IActionResult> OnPostRemoveAsync()
         {
-            var timetable = await db.Timetable.FindAsync(id);
-            if (timetable != null)
+            var timetablesToDelete = await db.Timetable.Where(t => AreChecked.Contains(t.Id)).ToListAsync();
+            if (timetablesToDelete != null)
             {
-                db.Timetable.Remove(timetable);
+                db.Timetable.RemoveRange(timetablesToDelete);
                 await db.SaveChangesAsync();
             }
 
@@ -138,7 +138,7 @@ namespace WorkTimeTable.Pages
                 months.Add(month.Key);
             }
 
-            OptionsMonths = new SelectList(months); // заменить на что-нибудь более-умное
+            OptionsMonths = new SelectList(months);
         }
     }
 }

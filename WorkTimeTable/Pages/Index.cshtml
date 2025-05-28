@@ -24,7 +24,9 @@
 
 @if (Model.WorkerShowId != null && Model.MonthShow != null)
 {
-    <table class="table table-striped table-bordered">
+    <div class="container">
+
+        <table class="table table-striped table-bordered">
             <tr><th>Номер договора</th><th>Кол-во часов</th></tr>
             @foreach(var timetable in Model.Timetables)
             {
@@ -39,16 +41,19 @@
                         </form>
                     </td>
                     <td>
-                        <form methof="post" asp-page-handler="Remove">
-                            <input type="hidden" name="id" value="@timetable.Id"/>
-                            <button type="submit" class="btn btn-danger">Удалить</button>
-                        </form>
+                        <input type="checkbox" name=AreChecked value="@timetable.Id" form="RemoveForm" />
                     </td>
                 </tr>
             }
-    </table>
+        </table>
 
-    <p><text>Всего дней в месяце @Model.DaysInMonth, остаток часов в месяце: @Model.HoursByContract</text></p>
+        <form method="post" id="RemoveForm" asp-page-handler="Remove" >
+            <button type="submit" class="btn btn-danger">Удалить</button>
+        </form>
+
+        <p><text>Всего дней в месяце @Model.DaysInMonth, остаток часов в месяце: @Model.HoursByContract</text></p>
+
+    </div>
 
     <p><text>Добавить работу</text></p>
 

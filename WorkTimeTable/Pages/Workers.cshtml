@@ -24,18 +24,19 @@
                         <select name="departmentId" asp-items="Model.Options">
                             <option selected disabled>Нет отдела</option>
                         </select>
-                        <button type="submit" class="btn btn-light">Изменить</button>
+                        <button type="submit" class="btn btn-light" asp-page-handler="Edit">Изменить</button>
                     </form>
                 </td>
                 <td>
-                <form method="post" asp-page-handler="Remove">
-                    <input type="hidden" name="id" value="@worker.Id" />
-                    <button type="submit">Удалить</button>
-                </form>
+                    <input type="checkbox" name=AreChecked value="@worker.Id" form="RemoveForm"/>
                 </td>
             </tr>
         }
     </table>
+
+    <form method="post" id="RemoveForm" asp-page-handler="Remove">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
 
 </div>
 

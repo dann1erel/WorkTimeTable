@@ -4,34 +4,39 @@
     ViewBag.Title = "Отделы";
 }
 
-<table class="table table-striped table-bordered">
-    <tr><th>ID</th><th>Название</th><th>Руководитель</th></tr>
-    @foreach (var department in Model.Departments)
-    {
-        string departmentName = department.Leader?.Name ?? "Нет руководителя";
-        <tr>
-            <td>@department.Id</td>
-            <td>@department.Name</td>
-            <td>@departmentName</td>
-            <td>
-                <form method="post" asp-page-handler="Edit">
-                    <input type="hidden" name="id" value="@department.Id" />
-                    <input name="name" value="@department.Name" /> @* проверка на null *@
-                    <select name="leaderId" asp-items="Model.Options">
-                        <option selected disabled>Нет Руководителя</option>
-                    </select>
-                    <button type="submit" class="btn btn-light">Изменить</button>
-                </form>
-            </td>
-            <td>
-                <form method="post" asp-page-handler="Remove">
-                    <input type="hidden" name="id" value="@department.Id" />
-                    <button type="submit" class="btn btn-danger">Удалить</button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+<div class="container">
+
+    <table class="table table-striped table-bordered">
+        <tr><th>ID</th><th>Название</th><th>Руководитель</th></tr>
+        @foreach (var department in Model.Departments)
+        {
+            string departmentName = department.Leader?.Name ?? "Нет руководителя";
+            <tr>
+                <td>@department.Id</td>
+                <td>@department.Name</td>
+                <td>@departmentName</td>
+                <td>
+                    <form method="post" asp-page-handler="Edit">
+                        <input type="hidden" name="id" value="@department.Id" />
+                        <input name="name" value="@department.Name" /> @* проверка на null *@
+                        <select name="leaderId" asp-items="Model.Options">
+                            <option selected disabled>Нет Руководителя</option>
+                        </select>
+                        <button type="submit" class="btn btn-light">Изменить</button>
+                    </form>
+                </td>
+                <td>
+                    <input type="checkbox" name=AreChecked value="@department.Id" form="RemoveForm" />
+                </td>
+            </tr>
+        }
+    </table>
+
+    <form method="post" id="RemoveForm" asp-page-handler="Remove">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+
+</div>
 
 <text>Добавить новый отдел</text>
 
