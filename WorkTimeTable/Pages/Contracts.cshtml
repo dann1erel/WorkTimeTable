@@ -7,10 +7,13 @@
 <div class="container">
 
     <table class="table table-striped table-bordered">
-        <tr><th>ID</th><th>Название</th></tr>
+        <tr><th>Чекбокс</th><th>ID</th><th>Название</th></tr>
         @foreach (var contract in Model.Contracts)
         {
             <tr>
+                <td>
+                    <input type="checkbox" name="AreChecked" value="@contract.Id" form="RemoveForm" />
+                </td>
                 <td>@contract.Id</td>
                 <td>@contract.Name</td>
                 <td>
@@ -20,9 +23,7 @@
                         <button type="submit" class="btn btn-light">Изменить</button>
                     </form>
                 </td>
-                <td>
-                    <input type="checkbox" name="AreChecked" value="@contract.Id" form="RemoveForm"/>
-                </td>
+
             </tr>
         }
     </table>

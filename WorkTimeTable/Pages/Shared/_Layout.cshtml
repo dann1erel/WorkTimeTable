@@ -16,31 +16,33 @@
 }
 
 <body>
+
     <header>
 
         <nav class="navbar navbar-light bg-light">
-            <div class="container">
-                <ul class="nav nav-underline">
-                    <li class="nav-item">
-                        <a asp-page="/Index" 
-                            asp-route-workerShowId="" 
-                            asp-route-monthShow="" 
-                            class="nav-link @(path == "/Index" || path == "/" ? "active" : "")">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-page="/Workers" class="nav-link @(path == "/Workers" ? "active" : "")">Работники</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-page="/Contracts" class="nav-link @(path == "/Contracts" ? "active" : "")">Договоры</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-page="/Departments" class="nav-link @(path == "/Departments" ? "active" : "")">Отделы</a>
-                    </li>
-                </ul>
-
+            <div class="container-fluid">
+                    <ul class="nav nav-underline">
+                        <li class="nav-item">
+                            <a asp-page="/Index" 
+                                asp-route-workerShowId="" 
+                                asp-route-monthShow="" 
+                                class="nav-link @(path == "/Index" || path == "/" ? "active" : "")">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-page="/Workers" class="nav-link @(path == "/Workers" ? "active" : "")">Работники</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-page="/Departments" class="nav-link @(path == "/Departments" ? "active" : "")">Отделы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-page="/Contracts" class="nav-link @(path == "/Contracts" ? "active" : "")">Договоры</a>
+                        </li>
+                    </ul>
             </div>
         </nav>
+
     </header>
+
     <div>
         @RenderBody()
     </div>

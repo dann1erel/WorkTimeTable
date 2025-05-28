@@ -7,11 +7,14 @@
 <div class="container">
 
     <table class="table table-striped table-bordered">
-        <tr><th>ID</th><th>ФИО</th><th>Должность</th><th>Отдел</th></tr>
+        <tr><th>Чекбокс</th><th>ID</th><th>ФИО</th><th>Должность</th><th>Отдел</th></tr>
         @foreach (var worker in Model.Workers)
         {
             string departmentName = worker.Department?.Name ?? "Нет отдела";
             <tr>
+                <td>
+                    <input type="checkbox" name=AreChecked value="@worker.Id" form="RemoveForm" />
+                </td>
                 <td>@worker.Id</td>
                 <td>@worker.Name</td>
                 <td>@worker.Position</td>
@@ -21,14 +24,11 @@
                         <input type="hidden" name="id" value="@worker.Id"/>
                         <input name="name" value="@worker.Name" /> @* проверка на null *@
                         <input name="position" value="@worker.Position" /> @* проверка на null *@
-                        <select name="departmentId" asp-items="Model.Options">
-                            <option selected disabled>Нет отдела</option>
+                        <select name="departmentId" asp-items="@(new SelectList(Model.Options, "Value", "Text", worker.DepartmentId?.ToString()))">
+                            <option value="">Нет отдела</option>
                         </select>
                         <button type="submit" class="btn btn-light" asp-page-handler="Edit">Изменить</button>
                     </form>
-                </td>
-                <td>
-                    <input type="checkbox" name=AreChecked value="@worker.Id" form="RemoveForm"/>
                 </td>
             </tr>
         }
@@ -47,7 +47,7 @@
         <input name="name" placeholder="имя" /> @* проверка на null *@
         <input name="position" placeholder="должность" /> @* проверка на null *@
         <select name="departmentId" asp-items="Model.Options">
-            <option selected disabled>Нет Отдела</option>
+            <option>Нет Отдела</option>
         </select>
     </p>
     <button type="submit" >Добавить</button>

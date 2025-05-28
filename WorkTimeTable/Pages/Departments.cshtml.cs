@@ -41,7 +41,7 @@ namespace WorkTimeTable.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostRemoveAsync()
+        public async Task<IActionResult> OnPostRemoveAsync() // можно вынести в отдельную функцию и отдельный класс
         {
             var departmentsToDelete = await db.Department.Where(d => AreChecked.Contains(d.Id)).ToListAsync();
             if (departmentsToDelete != null)

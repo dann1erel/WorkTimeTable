@@ -26,11 +26,15 @@
 {
     <div class="container">
 
+        <p><text>Всего дней в месяце @Model.DaysInMonth, остаток часов в месяце: @Model.HoursByContract</text></p>
         <table class="table table-striped table-bordered">
-            <tr><th>Номер договора</th><th>Кол-во часов</th></tr>
+            <tr><th>Чекбокс</th><th>Номер договора</th><th>Кол-во часов</th></tr>
             @foreach(var timetable in Model.Timetables)
             {
                 <tr>
+                    <td>
+                        <input type="checkbox" name=AreChecked value="@timetable.Id" form="RemoveForm" />
+                    </td>
                     <td>@timetable.Contract.Name</td>
                     <td>@timetable.Hours</td>
                     <td>
@@ -40,9 +44,6 @@
                             <button type="submit" class="btn btn-light">Изменить</button>
                         </form>
                     </td>
-                    <td>
-                        <input type="checkbox" name=AreChecked value="@timetable.Id" form="RemoveForm" />
-                    </td>
                 </tr>
             }
         </table>
@@ -50,8 +51,6 @@
         <form method="post" id="RemoveForm" asp-page-handler="Remove" >
             <button type="submit" class="btn btn-danger">Удалить</button>
         </form>
-
-        <p><text>Всего дней в месяце @Model.DaysInMonth, остаток часов в месяце: @Model.HoursByContract</text></p>
 
     </div>
 

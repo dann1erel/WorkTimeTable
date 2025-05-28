@@ -30,7 +30,7 @@ namespace WorkTimeTable.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostRemoveAsync(int id)
+        public async Task<IActionResult> OnPostRemoveAsync()
         {
             var contractsToDelete = await db.Contract.Where(c => AreChecked.Contains(c.Id)).ToListAsync();
             if (contractsToDelete != null)
