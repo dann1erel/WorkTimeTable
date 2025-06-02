@@ -1,8 +1,13 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WorkTimeTable.DataBase;
+using Microsoft.VisualBasic;
+using WorkTimeTable.Data;
+using WorkTimeTable.Models;
 
 namespace WorkTimeTable.Pages
 {
@@ -48,15 +53,7 @@ namespace WorkTimeTable.Pages
         {
 
             await CreateOptionsAsync();
-
-            Timetables = await db.Timetable
-                .Where(t => (t.WorkerId == WorkerShowId) && (t.Month == MonthShow))
-                .Include(t => t.Contract)
-                .Include(t => t.Worker)
-                .AsNoTracking()
-                .ToListAsync();
-
-            if (MonthShow != null) HoursByContract = _months2Days[MonthShow] * 8 - Timetables.Sum(t => t.Hours);
+            await GetDataAsync();
 
             return Page();
         }
@@ -65,15 +62,15 @@ namespace WorkTimeTable.Pages
         {
             if (WorkerShowId == null || MonthShow == null)
             {
-                return RedirectToPage("./Index");
+                return RedirectToPage();
             }
             return RedirectToPage("./Index", new { workerShowId = WorkerShowId, monthShow = MonthShow });
         }
 
         public async Task<IActionResult> OnPostAddAsync(int contractId, int hours, int workerId, string month)
         {
-            Timetable? timetableToAdd = await db.Timetable.FirstOrDefaultAsync(t => t.ContractId == contractId 
-                                                                    && t.WorkerId == workerId 
+            Timetable? timetableToAdd = await db.Timetable.FirstOrDefaultAsync(t => t.ContractId == contractId
+                                                                    && t.WorkerId == workerId
                                                                     && t.Month == month);
 
             if (timetableToAdd == null)
@@ -86,7 +83,7 @@ namespace WorkTimeTable.Pages
                     WorkerId = workerId
                 };
                 db.Timetable.Add(timetableToAdd);
-            } 
+            }
             else
             {
                 timetableToAdd.Hours += hours;
@@ -121,7 +118,7 @@ namespace WorkTimeTable.Pages
             return RedirectToPage("./Index", new { workerShowId = WorkerShowId, monthShow = MonthShow });
         }
 
-        public async Task CreateOptionsAsync()
+        private async Task CreateOptionsAsync()
         {
             OptionsWorkers = await db.Worker
                 .Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name })
@@ -140,5 +137,17 @@ namespace WorkTimeTable.Pages
 
             OptionsMonths = new SelectList(months);
         }
+
+        private async Task GetDataAsync()
+        {
+            Timetables = Timetables = await db.Timetable
+                .Where(t => (t.WorkerId == WorkerShowId) && (t.Month == MonthShow))
+                .Include(t => t.Contract)
+                .Include(t => t.Worker)
+                .AsNoTracking()
+                .ToListAsync();
+            if(MonthShow != null) HoursByContract = _months2Days[MonthShow!] * 8 - Timetables.Sum(t => t.Hours);
+        }
     }
 }
+

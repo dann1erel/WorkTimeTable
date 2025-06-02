@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkTimeTable.Models;
 
-namespace WorkTimeTable.DataBase
+namespace WorkTimeTable.Data
 {
     public class ApplicationContext : DbContext
     {

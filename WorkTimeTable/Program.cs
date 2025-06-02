@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WorkTimeTable.DataBase;
+using WorkTimeTable.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

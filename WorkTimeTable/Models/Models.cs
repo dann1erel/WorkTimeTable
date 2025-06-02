@@ -1,4 +1,4 @@
-﻿namespace WorkTimeTable.DataBase
+﻿namespace WorkTimeTable.Models
 {
     // Здесь определяется структуру БД
 
@@ -76,8 +76,8 @@
     public class Timetable
     {
         public int Id { get; set; }
-        public int? Hours { get; set; }
-        public string? Month { get; set; } // рыба, заменить либо на enum, либо на datetime тип 
+        public int Hours { get; set; }
+        public string? Month { get; set; }
 
         // связь между таблицами
         public Contract Contract { get; set; } = null!; // навигационное свойство
