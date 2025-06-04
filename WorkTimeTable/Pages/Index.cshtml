@@ -53,8 +53,41 @@
                 <table class="table table-striped table-bordered">
                     <tr>
                         <th><input type="checkbox" id="CheckAll" /></th>
-                        <th>Номер договора</th>
-                        <th>Кол-во часов</th>
+                        <th>
+                            Номер договора
+                            <a asp-page="./Index"
+                               asp-route-workerShowId="@Model.WorkerShowId"
+                               asp-route-monthShow="@Model.MonthShow"
+                               asp-route-sortOrder="@Model.NameSort" 
+                               asp-route-currentNameFilter="@Model.NameFilter">
+                                *
+                            </a>
+                            <a asp-page="./Index/@Model.WorkerShowId/@Model.MonthShow" asp-route-sortOrder="@null">
+                                +
+                            </a>
+
+                            <form method="get" asp-page="./Index"
+                                               asp-route-workerShowId="@Model.WorkerShowId"
+                                               asp-route-monthShow="@Model.MonthShow">
+                                <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                                <button type="submit" class="btn btn-light">Поиск</button>
+                            </form>
+                        </th>
+                        <th>
+                            Кол-во часов
+                            <a asp-page="./Index"
+                               asp-route-workerShowId="@Model.WorkerShowId"
+                               asp-route-monthShow="@Model.MonthShow"
+                               asp-route-sortOrder="@Model.HoursSort">
+                                *
+                            </a>
+                            <a asp-page="./Index"
+                               asp-route-workerShowId="@Model.WorkerShowId"
+                               asp-route-monthShow="@Model.MonthShow"
+                               asp-route-sortOrder="@null">
+                                +
+                            </a>
+                        </th>
                     </tr>
                     @foreach(var timetable in Model.Timetables)
                     {
@@ -74,6 +107,30 @@
                         </tr>
                     }
                 </table>
+
+                @{
+                    var prevDisabled = !Model.Timetables.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.Timetables.HasNextPage ? "disabled" : "";
+                }
+
+                <a asp-page="./Index"
+                   asp-route-workerShowId="@Model.WorkerShowId"
+                   asp-route-monthShow="@Model.MonthShow"
+                   asp-route-sortOrder="@Model.CurrentSort"
+                   asp-route-pageIndex="@(Model.Timetables.PageIndex - 1)"
+                   asp-route-currentNameFilter="@Model.NameFilter"
+                   class="btn btn-secondary @prevDisabled">
+                    Назад
+                </a>
+                <a asp-page="./Index"
+                   asp-route-workerShowId="@Model.WorkerShowId"
+                   asp-route-monthShow="@Model.MonthShow"
+                   asp-route-sortOrder="@Model.CurrentSort"
+                   asp-route-pageIndex="@(Model.Timetables.PageIndex + 1)"
+                   asp-route-currentNameFilter="@Model.NameFilter"
+                   class="btn btn-secondary @nextDisabled">
+                    Вперёд
+                </a>
 
             </div>
 

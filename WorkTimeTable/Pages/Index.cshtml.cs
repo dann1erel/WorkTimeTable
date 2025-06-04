@@ -20,7 +20,7 @@ namespace WorkTimeTable.Pages
         public string? MonthShow { get; set; }
         
         // для получения данных из бд
-        public List<Timetable> Timetables { get; set; } = [];
+        public PaginatedList<Timetable>? Timetables { get; set; }
 
         // для тега select
         public List<SelectListItem> OptionsWorkers { get; set; } = null!;
@@ -28,7 +28,7 @@ namespace WorkTimeTable.Pages
         public SelectList OptionsMonths {  get; set; } = null!;
 
         // для контрольной суммы
-        private static readonly Dictionary<string, int> _months2Days = new Dictionary<string, int>()
+        private static readonly Dictionary<string, int> _months2Days = new()
         {
             {"Май", 18},
             {"Июнь", 19},
@@ -49,11 +49,46 @@ namespace WorkTimeTable.Pages
         [BindProperty]
         public List<int> AreChecked { get; set; } = [];
 
-        public async Task<IActionResult> OnGetAsync()
+        // для фильтрации
+        public string? CurrentSort { get; set; }
+        public string NameSort => CurrentSort == "name_desc" ? "name_asc" : "name_desc";
+        public string HoursSort => CurrentSort == "hours_desc" ? "hours_asc" : "hours_desc";
+
+        // для поиска
+        public string? NameFilter { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(string sortOrder, string searchNameString,
+                                                    string currentNameFilter, int? pageIndex)
         {
+            CurrentSort = sortOrder;
+            NameFilter = !String.IsNullOrEmpty(searchNameString) ? searchNameString : currentNameFilter;
+
+            IQueryable<Timetable> timetables = db.Timetable
+                                                        .Where(t => t.WorkerId == WorkerShowId && t.Month == MonthShow)
+                                                        .Include(t => t.Contract)
+                                                        .Include(t => t.Worker);
+
+            if (searchNameString != null) pageIndex = 1;
+
+            if (!String.IsNullOrEmpty(searchNameString))
+            {
+                timetables = timetables.Where(t => t.Contract.Name.Contains(searchNameString));
+            }
+
+            timetables = sortOrder switch
+            {
+                "name_desc" => timetables.OrderByDescending(t => t.Contract.Name),
+                "name_asc" => timetables.OrderBy(t => t.Contract.Name),
+                "hours_desc" => timetables.OrderByDescending(t => t.Hours),
+                "hours_asc" => timetables.OrderBy(t => t.Hours),
+                _ => timetables
+            };
+
+            int pageSize = 5;
+            Timetables = await PaginatedList<Timetable>.CreateAsync(timetables.AsNoTracking(), pageIndex ?? 1, pageSize);
 
             await CreateOptionsAsync();
-            await GetDataAsync();
+            GetHours();
 
             return Page();
         }
@@ -138,15 +173,11 @@ namespace WorkTimeTable.Pages
             OptionsMonths = new SelectList(months);
         }
 
-        private async Task GetDataAsync()
+        private void GetHours()
         {
-            Timetables = Timetables = await db.Timetable
-                .Where(t => (t.WorkerId == WorkerShowId) && (t.Month == MonthShow))
-                .Include(t => t.Contract)
-                .Include(t => t.Worker)
-                .AsNoTracking()
-                .ToListAsync();
-            if(MonthShow != null) HoursByContract = _months2Days[MonthShow!] * 8 - Timetables.Sum(t => t.Hours);
+            if(MonthShow != null) HoursByContract = _months2Days[MonthShow!] * 8 - db.Timetable
+                                                                                        .Where(t => t.WorkerId == WorkerShowId && t.Month == MonthShow)
+                                                                                        .Sum(t => t.Hours);
         }
     }
 }

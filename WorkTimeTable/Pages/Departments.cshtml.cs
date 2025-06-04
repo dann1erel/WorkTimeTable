@@ -35,7 +35,8 @@ namespace WorkTimeTable.Pages
 
 
         public async Task<IActionResult> OnGetAsync(string sortOrder, string searchNameString, 
-            string searchLeaderString, string currentNameFilter, string currentLeaderFilter, int? pageIndex)
+                                                    string searchLeaderString, string currentNameFilter,
+                                                    string currentLeaderFilter, int? pageIndex)
         {
             CurrentSort = sortOrder;
 

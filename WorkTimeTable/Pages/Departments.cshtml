@@ -87,7 +87,7 @@
                asp-route-pageIndex="@(Model.Departments.PageIndex - 1)"
                asp-route-currentNameFilter="@Model.NameFilter"
                asp-route-currentLeaderFilter="@Model.LeaderFilter"
-               class="btn btn-default @prevDisabled">
+               class="btn btn-secondary @prevDisabled">
                 Назад
             </a>
             <a asp-page="./Departments"
@@ -95,7 +95,7 @@
                asp-route-pageIndex="@(Model.Departments.PageIndex + 1)"
                asp-route-currentNameFilter="@Model.NameFilter"
                asp-route-currentLeaderFilter="@Model.LeaderFilter"
-               class="btn btn-default @nextDisabled">
+               class="btn btn-secondary @nextDisabled">
                 Вперёд
             </a>
 

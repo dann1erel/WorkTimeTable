@@ -25,7 +25,8 @@ namespace WorkTimeTable.Pages
         // для поиска
         public string? NameFilter { get; set; }
 
-        public async Task<IActionResult> OnGet(string sortOrder, string searchNameString, string currentNameFilter, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(string sortOrder, string searchNameString, 
+                                                    string currentNameFilter, int? pageIndex)
         {
             CurrentSort = sortOrder;
 

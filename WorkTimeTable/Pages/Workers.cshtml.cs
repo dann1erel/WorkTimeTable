@@ -35,10 +35,10 @@ namespace WorkTimeTable.Pages
         public string? DepartmentFilter { get; set; }
 
 
-        public async Task<IActionResult> OnGet( string sortOrder, string searchNameString,
-                                                string searchPositionString, string searchDepartmentString,
-                                                string currentNameFilter, string currentPositionFilter,
-                                                string currentDepartmentFilter, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(string sortOrder, string searchNameString,
+                                                    string searchPositionString, string searchDepartmentString,
+                                                    string currentNameFilter, string currentPositionFilter,
+                                                    string currentDepartmentFilter, int? pageIndex)
         {
             CurrentSort = sortOrder;
             
