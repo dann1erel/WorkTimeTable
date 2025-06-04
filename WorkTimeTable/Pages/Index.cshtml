@@ -67,7 +67,7 @@
                             <td>
                                 <form method="post" asp-page-handler="Edit">
                                     <input class="form-control" type="hidden" name="id" value="@timetable.Id" />
-                                    <input class="form-control" name="hours" type="number" step="1" min="0" value="@timetable.Hours" />
+                                    <input class="form-control" name="hours" type="number" step="1" min="1" max="@Model.HoursByContract" value="@timetable.Hours" />
                                     <button type="submit" class="btn btn-light">Изменить</button>
                                 </form>
                             </td>
@@ -105,7 +105,7 @@
                                 </select>
                             </div>
                             <div class="col">
-                                <input name="hours" type="number" step="1" min="0" placeholder="Кол-во часов" />
+                                <input name="hours" type="number" step="1" min="1" max="@Model.HoursByContract" placeholder="Кол-во часов" required/>
                                 <div class="form-text">Остаток: @Model.HoursByContract ч.</div>
                             </div>
                             <input type="hidden" name="workerId" value="@Model.WorkerShowId" />

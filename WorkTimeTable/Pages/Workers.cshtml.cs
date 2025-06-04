@@ -10,7 +10,7 @@ namespace WorkTimeTable.Pages
     public class WorkersModel(ApplicationContext db) : PageModel
     {
         // для получения данных из бд
-        public List<Worker> Workers { get; private set; } = [];
+        public PaginatedList<Worker>? Workers { get; private set; }
 
         // для отправки данных в бд
         [BindProperty]
@@ -23,12 +23,62 @@ namespace WorkTimeTable.Pages
         [BindProperty]
         public List<int> AreChecked { get; set; } = [];
 
-        public async Task<IActionResult> OnGet()
+        // для сортировки
+        public string? CurrentSort { get; set; }
+        public string NameSort => CurrentSort == "name_desc" ? "name_asc" : "name_desc";
+        public string PositionSort => CurrentSort == "pos_desc" ? "pos_asc" : "pos_desc";
+        public string DepartmentSort => CurrentSort == "dep_desc" ? "dep_asc" : "dep_desc";
+
+        // для поиска
+        public string? NameFilter {  get; set; }
+        public string? PositionFilter { get; set; }
+        public string? DepartmentFilter { get; set; }
+
+
+        public async Task<IActionResult> OnGet( string sortOrder, string searchNameString,
+                                                string searchPositionString, string searchDepartmentString,
+                                                string currentNameFilter, string currentPositionFilter,
+                                                string currentDepartmentFilter, int? pageIndex)
         {
-            Workers = await db.Worker
-                .Include(w => w.Department)
-                .AsNoTracking()
-                .ToListAsync();
+            CurrentSort = sortOrder;
+            
+            NameFilter = !String.IsNullOrEmpty(searchNameString) ? searchNameString : currentNameFilter;
+            PositionFilter = !String.IsNullOrEmpty(searchPositionString) ? searchPositionString : currentPositionFilter;
+            DepartmentFilter = !String.IsNullOrEmpty(searchDepartmentString) ? searchDepartmentString : currentDepartmentFilter;
+
+            IQueryable<Worker> workers = db.Worker.Include(w => w.Department);
+
+            if (searchNameString != null || searchPositionString != null || searchDepartmentString != null) pageIndex = 1;
+
+            if (!String.IsNullOrEmpty(searchNameString))
+            {
+                workers = workers.Where(w => w.Name.Contains(searchNameString));
+            }
+
+            if (!String.IsNullOrEmpty(searchPositionString))
+            {
+                workers = workers.Where(w => w.Position.Contains(searchPositionString));
+            }
+
+            if (!String.IsNullOrEmpty(searchDepartmentString))
+            {
+                workers = workers.Where(w => w.Name.Contains(searchDepartmentString));
+            }
+
+            workers = sortOrder switch
+            {
+                "name_desc" => workers.OrderByDescending(w => w.Name),
+                "name_asc" => workers.OrderBy(w => w.Name),
+                "pos_desc" => workers.OrderByDescending(w => w.Position),
+                "pos_asc" => workers.OrderBy(w => w.Position),
+                "dep_desc" => workers.OrderByDescending(w => w.Department.Name),
+                "dep_asc" => workers.OrderBy(w => w.Department.Name),
+                _ => workers
+            };
+
+            int pageSize = 5;
+            Workers = await PaginatedList<Worker>.CreateAsync(workers.AsNoTracking(), pageIndex ?? 1, pageSize);
+
             Options = await db.Department
                 .Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.Name })
                 .AsNoTracking()

@@ -24,9 +24,48 @@
                 <tr>
                     <th><input class="form-check-input" type="checkbox" id="CheckAll" /></th>
                     <th>ID</th>
-                    <th>ФИО</th>
-                    <th>Должность</th>
-                    <th>Отдел</th>
+                    <th>
+                        ФИО
+                        <a asp-page="./Workers" asp-route-sortOrder="@Model.NameSort" asp-route-currentNameFilter="@Model.NameFilter">
+                            *
+                        </a>
+                        <a asp-page="./Workers" asp-route-sortOrder="@null">
+                            +
+                        </a>
+
+                        <form method="get" asp-page="./Workers">
+                            <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                            <button type="submit" class="btn btn-light">Поиск</button>
+                        </form>
+                    </th>
+                    <th>
+                        Должность
+                        <a asp-page="./Workers" asp-route-sortOrder="@Model.PositionSort" asp-route-currentNameFilter="@Model.PositionFilter">
+                            *
+                        </a>
+                        <a asp-page="./Workers" asp-route-sortOrder="@null">
+                            +
+                        </a>
+
+                        <form method="get" asp-page="./Workers">
+                            <input class="form-control" type="text" name="searchPositionString" value="@Model.PositionFilter" />
+                            <button type="submit" class="btn btn-light">Поиск</button>
+                        </form>
+                    </th>
+                    <th>
+                        Отдел
+                        <a asp-page="./Workers" asp-route-sortOrder="@Model.DepartmentSort" asp-route-currentNameFilter="@Model.DepartmentFilter">
+                            *
+                        </a>
+                        <a asp-page="./Workers" asp-route-sortOrder="@null">
+                            +
+                        </a>
+
+                        <form method="get" asp-page="./Workers">
+                            <input class="form-control" type="text" name="searchDepartmentString" value="@Model.DepartmentFilter" />
+                            <button type="submit" class="btn btn-light">Поиск</button>
+                        </form>
+                    </th>
                 </tr>
                 @foreach (var worker in Model.Workers)
                 {
@@ -42,8 +81,8 @@
                         <td>
                             <form method="post" asp-page-handler="Edit">
                                 <input type="hidden" name="id" value="@worker.Id" />
-                                <input class="form-control" name="name" value="@worker.Name" /> @* проверка на null *@
-                                <input class="form-control" name="position" value="@worker.Position" /> @* проверка на null *@
+                                <input class="form-control" name="name" value="@worker.Name" required/> @* проверка на null *@
+                                <input class="form-control" name="position" value="@worker.Position" required/> @* проверка на null *@
                                 <select class="form-select" name="departmentId"
                                         asp-items="@(new SelectList(Model.Options, "Value", "Text", worker.DepartmentId?.ToString()))">
                                     <option value="">Нет отдела</option>
@@ -54,6 +93,30 @@
                     </tr>
                 }
             </table>
+
+            @{
+                var prevDisabled = !Model.Workers.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.Workers.HasNextPage ? "disabled" : "";
+            }
+
+            <a asp-page="./Workers"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.Workers.PageIndex - 1)"
+               asp-route-currentNameFilter="@Model.NameFilter"
+               asp-route-currentPositionFilter="@Model.PositionFilter"
+               asp-route-currentDepartmentFilter="@Model.DepartmentFilter"
+               class="btn btn-default @prevDisabled">
+                Назад
+            </a>
+            <a asp-page="./Workers"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.Workers.PageIndex + 1)"
+               asp-route-currentNameFilter="@Model.NameFilter"
+               asp-route-currentPositionFilter="@Model.PositionFilter"
+               asp-route-currentDepartmentFilter="@Model.DepartmentFilter"
+               class="btn btn-default @nextDisabled">
+                Вперёд
+            </a>
 
         </div>
 
@@ -80,10 +143,10 @@
 
                     <div class="row">
                         <div class="col">
-                            <input class="form-control" name="name" placeholder="Имя" /> @* проверка на null *@
+                            <input class="form-control" name="name" placeholder="Имя" required/> @* проверка на null *@
                         </div>
                         <div class="col">
-                            <input class="form-control" name="position" placeholder="Должность" /> @* проверка на null *@
+                            <input class="form-control" name="position" placeholder="Должность" required/> @* проверка на null *@
                         </div>
                         <div class="col">
                             <select class="form-select" name="departmentId" asp-items="Model.Options">

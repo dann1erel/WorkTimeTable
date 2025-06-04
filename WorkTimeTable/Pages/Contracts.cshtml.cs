@@ -9,7 +9,7 @@ namespace WorkTimeTable.Pages
     public class ContractsModel(ApplicationContext db) : PageModel
     {
         // для получения данных из бд
-        public List<Contract> Contracts { get; private set; } = [];
+        public PaginatedList<Contract>? Contracts { get; private set; }
         // для отправки данных в бд
         [BindProperty]
         public Contract Contract { get; set; } = new();
@@ -18,9 +18,38 @@ namespace WorkTimeTable.Pages
         [BindProperty]
         public List<int> AreChecked { get; set; } = [];
 
-        public async Task<IActionResult> OnGet()
+        // для сортировки
+        public string? CurrentSort { get; set; }
+        public string NameSort => CurrentSort == "name_desc" ? "name_asc" : "name_desc";
+
+        // для поиска
+        public string? NameFilter { get; set; }
+
+        public async Task<IActionResult> OnGet(string sortOrder, string searchNameString, string currentNameFilter, int? pageIndex)
         {
-            Contracts = await db.Contract.AsNoTracking().ToListAsync();
+            CurrentSort = sortOrder;
+
+            NameFilter = !String.IsNullOrEmpty(searchNameString) ? searchNameString : currentNameFilter;
+
+            IQueryable<Contract> contracts = db.Contract;
+
+            if (searchNameString != null) pageIndex = 1;
+
+            if (!String.IsNullOrEmpty(searchNameString))
+            {
+                contracts = contracts.Where(d => d.Name.Contains(searchNameString));
+            }
+
+            contracts = sortOrder switch
+            {
+                "name_desc" => contracts.OrderByDescending(d => d.Name),
+                "name_asc" => contracts.OrderBy(d => d.Name),
+                _ => contracts 
+            };
+
+            int pageSize = 5;
+            Contracts = await PaginatedList<Contract>.CreateAsync(contracts.AsNoTracking(), pageIndex ?? 1, pageSize);
+
             return Page();
         }
 

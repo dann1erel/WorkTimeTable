@@ -24,7 +24,21 @@
                 <tr>
                     <th><input class="form-check-input" type="checkbox" id="CheckAll"/></th>
                     <th>ID</th>
-                    <th>Название</th>
+                    <th>
+                        Название
+                        <a asp-page="./Contracts" asp-route-sortOrder="@Model.NameSort" asp-route-currentNameFilter="@Model.NameFilter">
+                            *
+                        </a>
+                        <a asp-page="./Contracts" asp-route-sortOrder="@null">
+                            +
+                        </a>
+
+                        <form method="get" asp-page="./Contracts">
+                            <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                            <button type="submit" class="btn btn-light">Поиск</button>
+                        </form>
+
+                    </th>
                 </tr>
                 @foreach (var contract in Model.Contracts)
                 {
@@ -37,13 +51,33 @@
                         <td>
                             <form method="post" asp-page-handler="Edit">
                                 <input type="hidden" name="id" value="@contract.Id" />
-                                <input class="form-control" name="name" value="@contract.Name" /> @* проверка на null *@
+                                <input class="form-control" name="name" value="@contract.Name" required/> @* проверка на null *@
                                 <button class="btn btn-outline-secondary" type="submit">Изменить</button>
                             </form>
                         </td>
                     </tr>
                 }
             </table>
+
+            @{
+                var prevDisabled = !Model.Contracts.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.Contracts.HasNextPage ? "disabled" : "";
+            }
+
+            <a asp-page="./Contracts"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.Contracts.PageIndex - 1)"
+               asp-route-currentNameFilter="@Model.NameFilter"
+               class="btn btn-default @prevDisabled">
+                Назад
+            </a>
+            <a asp-page="./Contracts"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.Contracts.PageIndex + 1)"
+               asp-route-currentNameFilter="@Model.NameFilter"
+               class="btn btn-default @nextDisabled">
+                Вперёд
+            </a>
 
         </div>
 
@@ -70,7 +104,7 @@
 
                     <div class="row">
                         <div class="col">
-                            <input class="form-control" name="name" placeholder="Номер договора" />
+                            <input class="form-control" name="name" placeholder="Номер договора" required/>
                         </div>
                     </div>
 

@@ -24,8 +24,34 @@
                 <tr>
                     <th><input class="form-check-input" type="checkbox" id="CheckAll" /></th>
                     <th>ID</th>
-                    <th>Название</th>
-                    <th>Руководитель</th>
+                    <th>
+                        Название
+                        <a asp-page="./Departments" asp-route-sortOrder="@Model.NameSort" asp-route-currentNameFilter="@Model.NameFilter">
+                            *
+                        </a>
+                        <a asp-page="./Departments" asp-route-sortOrder="@null">
+                            +
+                        </a>
+
+                        <form method="get" asp-page="./Departments">
+                            <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                            <button type="submit" class="btn btn-light">Поиск</button>
+                        </form>
+                    </th>
+                    <th>
+                        Руководитель
+                        <a asp-page="./Departments" asp-route-sortOrder="@Model.LeaderSort">
+                            *
+                        </a>
+                        <a asp-page="./Departments" asp-route-sortOrder="@null">
+                            +
+                        </a>
+
+                        <form method="get" asp-page="./Departments">
+                            <input class="form-control" type="text" name="searchLeaderString" value="@Model.LeaderFilter" />
+                            <button type="submit" class="btn btn-light">Поиск</button>
+                        </form>
+                    </th>
                 </tr>
                 @foreach (var department in Model.Departments)
                 {
@@ -40,7 +66,7 @@
                         <td>
                             <form method="post" asp-page-handler="Edit">
                                 <input class="form-control" type="hidden" name="id" value="@department.Id" />
-                                <input class="form-control" name="name" value="@department.Name" /> @* проверка на null *@
+                                <input class="form-control" name="name" value="@department.Name" required/> @* проверка на null *@
                                 <select class="form-select" name="leaderId" asp-items="@(new SelectList(Model.Options, "Value", "Text", department.LeaderId?.ToString()))">
                                     <option selected>Нет Руководителя</option>
                                 </select>
@@ -50,6 +76,29 @@
                     </tr>
                 }
             </table>
+
+            @{
+                var prevDisabled = !Model.Departments.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.Departments.HasNextPage ? "disabled" : "";
+            }
+
+            <a asp-page="./Departments"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.Departments.PageIndex - 1)"
+               asp-route-currentNameFilter="@Model.NameFilter"
+               asp-route-currentLeaderFilter="@Model.LeaderFilter"
+               class="btn btn-default @prevDisabled">
+                Назад
+            </a>
+            <a asp-page="./Departments"
+               asp-route-sortOrder="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.Departments.PageIndex + 1)"
+               asp-route-currentNameFilter="@Model.NameFilter"
+               asp-route-currentLeaderFilter="@Model.LeaderFilter"
+               class="btn btn-default @nextDisabled">
+                Вперёд
+            </a>
+
 
         </div>
 
@@ -76,7 +125,7 @@
 
                     <div class="row">
                         <div class="col">
-                            <input class="form-control" name="name" placeholder="Название" /> @* проверка на null *@
+                            <input class="form-control" name="name" placeholder="Название" required/> @* проверка на null *@
                         </div>
                         <div class="col">
                             <select class="form-select" name="leaderId" asp-items="Model.Options">
