@@ -26,44 +26,53 @@
                     <th>ID</th>
                     <th>
                         ФИО
-                        <a asp-page="./Workers" asp-route-sortOrder="@Model.NameSort" asp-route-currentNameFilter="@Model.NameFilter">
-                            *
-                        </a>
-                        <a asp-page="./Workers" asp-route-sortOrder="@null">
-                            +
+                        <a asp-page="./Workers" 
+                           asp-route-sortOrder="@Model.NameSort" 
+                           asp-route-currentNameFilter="@Model.NameFilter">
+                            <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "name"))"></i>
                         </a>
 
                         <form method="get" asp-page="./Workers">
-                            <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
-                            <button type="submit" class="btn btn-light">Поиск</button>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                                <button type="submit" class="btn btn-light">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </form>
                     </th>
                     <th>
                         Должность
-                        <a asp-page="./Workers" asp-route-sortOrder="@Model.PositionSort" asp-route-currentNameFilter="@Model.PositionFilter">
-                            *
-                        </a>
-                        <a asp-page="./Workers" asp-route-sortOrder="@null">
-                            +
+                        <a asp-page="./Workers" 
+                           asp-route-sortOrder="@Model.PositionSort" 
+                           asp-route-currentNameFilter="@Model.PositionFilter">
+                            <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "pos"))"></i>
                         </a>
 
                         <form method="get" asp-page="./Workers">
-                            <input class="form-control" type="text" name="searchPositionString" value="@Model.PositionFilter" />
-                            <button type="submit" class="btn btn-light">Поиск</button>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="searchPositionString" value="@Model.PositionFilter" />
+                                <button type="submit" class="btn btn-light">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </form>
                     </th>
                     <th>
                         Отдел
-                        <a asp-page="./Workers" asp-route-sortOrder="@Model.DepartmentSort" asp-route-currentNameFilter="@Model.DepartmentFilter">
-                            *
-                        </a>
-                        <a asp-page="./Workers" asp-route-sortOrder="@null">
-                            +
+                        <a asp-page="./Workers" 
+                           asp-route-sortOrder="@Model.DepartmentSort" 
+                           asp-route-currentNameFilter="@Model.DepartmentFilter">
+                            <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "dep"))"></i>
                         </a>
 
                         <form method="get" asp-page="./Workers">
-                            <input class="form-control" type="text" name="searchDepartmentString" value="@Model.DepartmentFilter" />
-                            <button type="submit" class="btn btn-light">Поиск</button>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="searchDepartmentString" value="@Model.DepartmentFilter" />
+                                <button type="submit" class="btn btn-light">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </form>
                     </th>
                 </tr>

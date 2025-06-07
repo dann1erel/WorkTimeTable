@@ -25,9 +25,12 @@ namespace WorkTimeTable.Pages
 
         // для сортировки
         public string? CurrentSort { get; set; }
-        public string NameSort => CurrentSort == "name_desc" ? "name_asc" : "name_desc";
-        public string PositionSort => CurrentSort == "pos_desc" ? "pos_asc" : "pos_desc";
-        public string DepartmentSort => CurrentSort == "dep_desc" ? "dep_asc" : "dep_desc";
+        public string? NameSort => CurrentSort == "name_desc" ? "name_asc" : 
+                                   CurrentSort == "name_asc" ? null : "name_desc";
+        public string? PositionSort => CurrentSort == "pos_desc" ? "pos_asc" : 
+                                       CurrentSort == "pos_asc" ? null : "pos_desc";
+        public string? DepartmentSort => CurrentSort == "dep_desc" ? "dep_asc" : 
+                                         CurrentSort == "dep_asc" ? null : "dep_desc";
 
         // для поиска
         public string? NameFilter {  get; set; }
@@ -62,7 +65,7 @@ namespace WorkTimeTable.Pages
 
             if (!String.IsNullOrEmpty(searchDepartmentString))
             {
-                workers = workers.Where(w => w.Name.Contains(searchDepartmentString));
+                workers = workers.Where(w => w.Department.Name.Contains(searchDepartmentString));
             }
 
             workers = sortOrder switch

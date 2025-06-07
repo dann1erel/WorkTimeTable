@@ -1,4 +1,5 @@
 ﻿@page "{workerShowId?}/{monthShow?}"
+@using Microsoft.Extensions.Primitives;
 @model WorkTimeTable.Pages.IndexModel
 
 @{
@@ -12,12 +13,12 @@
         <text>
             Выработка сотрудника 
             <select asp-for="WorkerShowId" 
-                    asp-items="Model.OptionsWorkers" required>
+            asp-items="Model.OptionsWorkers" required>
                 <option value="" disabled selected>— Выберите Сотрудника —</option>
             </select>
             за месяц 
             <select asp-for="MonthShow"
-                    asp-items="Model.OptionsMonths" required>
+            asp-items="Model.OptionsMonths" required>
                 <option value="" disabled selected>— Выберите Месяц —</option>
             </select>
         </text>
@@ -52,7 +53,7 @@
 
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <th><input type="checkbox" id="CheckAll" /></th>
+                        <th><input type="checkbox" id="CheckAll"/></th>
                         <th>
                             Номер договора
                             <a asp-page="./Index"
@@ -60,17 +61,18 @@
                                asp-route-monthShow="@Model.MonthShow"
                                asp-route-sortOrder="@Model.NameSort" 
                                asp-route-currentNameFilter="@Model.NameFilter">
-                                *
-                            </a>
-                            <a asp-page="./Index/@Model.WorkerShowId/@Model.MonthShow" asp-route-sortOrder="@null">
-                                +
+                                <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "name"))"></i>
                             </a>
 
                             <form method="get" asp-page="./Index"
                                                asp-route-workerShowId="@Model.WorkerShowId"
                                                asp-route-monthShow="@Model.MonthShow">
-                                <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
-                                <button type="submit" class="btn btn-light">Поиск</button>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                                    <button type="submit" class="btn btn-light">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
                             </form>
                         </th>
                         <th>
@@ -79,17 +81,11 @@
                                asp-route-workerShowId="@Model.WorkerShowId"
                                asp-route-monthShow="@Model.MonthShow"
                                asp-route-sortOrder="@Model.HoursSort">
-                                *
-                            </a>
-                            <a asp-page="./Index"
-                               asp-route-workerShowId="@Model.WorkerShowId"
-                               asp-route-monthShow="@Model.MonthShow"
-                               asp-route-sortOrder="@null">
-                                +
+                                <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "hours"))"></i>
                             </a>
                         </th>
                     </tr>
-                    @foreach(var timetable in Model.Timetables)
+                    @foreach (var timetable in Model.Timetables)
                     {
                         <tr>
                             <td>
@@ -100,7 +96,7 @@
                             <td>
                                 <form method="post" asp-page-handler="Edit">
                                     <input class="form-control" type="hidden" name="id" value="@timetable.Id" />
-                                    <input class="form-control" name="hours" type="number" step="1" min="1" max="@Model.HoursByContract" value="@timetable.Hours" />
+                                    <input class="form-control" name="hours" type="number" step="1" min="1" max="@(timetable.Hours + Model.HoursByContract)" value="@timetable.Hours" />
                                     <button type="submit" class="btn btn-light">Изменить</button>
                                 </form>
                             </td>
@@ -132,13 +128,14 @@
                     Вперёд
                 </a>
 
+
             </div>
 
         </div>
 
     </div>
 
-    <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -181,4 +178,7 @@
             </div>
         </div>
     </div>
+
+
+
 }

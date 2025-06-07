@@ -26,30 +26,35 @@
                     <th>ID</th>
                     <th>
                         Название
-                        <a asp-page="./Departments" asp-route-sortOrder="@Model.NameSort" asp-route-currentNameFilter="@Model.NameFilter">
-                            *
-                        </a>
-                        <a asp-page="./Departments" asp-route-sortOrder="@null">
-                            +
+                        <a asp-page="./Departments" 
+                           asp-route-sortOrder="@Model.NameSort" 
+                           asp-route-currentNameFilter="@Model.NameFilter">
+                            <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "name"))"></i>
                         </a>
 
                         <form method="get" asp-page="./Departments">
-                            <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
-                            <button type="submit" class="btn btn-light">Поиск</button>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="searchNameString" value="@Model.NameFilter" />
+                                <button type="submit" class="btn btn-light">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </form>
                     </th>
                     <th>
                         Руководитель
-                        <a asp-page="./Departments" asp-route-sortOrder="@Model.LeaderSort">
-                            *
-                        </a>
-                        <a asp-page="./Departments" asp-route-sortOrder="@null">
-                            +
+                        <a asp-page="./Departments" 
+                           asp-route-sortOrder="@Model.LeaderSort">
+                            <i class="bi bi-@(HtmlAttributes.GetSortingCaretType(Request.Query["sortOrder"], "leader"))"></i>
                         </a>
 
                         <form method="get" asp-page="./Departments">
-                            <input class="form-control" type="text" name="searchLeaderString" value="@Model.LeaderFilter" />
-                            <button type="submit" class="btn btn-light">Поиск</button>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="searchLeaderString" value="@Model.LeaderFilter" />
+                                <button type="submit" class="btn btn-light">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
                         </form>
                     </th>
                 </tr>

@@ -1,11 +1,7 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using WorkTimeTable.Data;
 using WorkTimeTable.Models;
 
@@ -51,8 +47,10 @@ namespace WorkTimeTable.Pages
 
         // для фильтрации
         public string? CurrentSort { get; set; }
-        public string NameSort => CurrentSort == "name_desc" ? "name_asc" : "name_desc";
-        public string HoursSort => CurrentSort == "hours_desc" ? "hours_asc" : "hours_desc";
+        public string? NameSort => CurrentSort == "name_desc" ? "name_asc" : 
+                                   CurrentSort == "name_asc" ? null : "name_desc" ;
+        public string? HoursSort => CurrentSort == "hours_desc" ? "hours_asc" :
+                                    CurrentSort == "hours_asc" ? null : "hours_desc";
 
         // для поиска
         public string? NameFilter { get; set; }

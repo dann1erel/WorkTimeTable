@@ -26,8 +26,10 @@ namespace WorkTimeTable.Pages
 
         // для сортировки
         public string? CurrentSort { get; private set; }
-        public string NameSort => CurrentSort == "name_desc" ? "name_asc" : "name_desc";
-        public string LeaderSort => CurrentSort == "leader_desc" ? "leader_asc" : "leader_desc";
+        public string? NameSort => CurrentSort == "name_desc" ? "name_asc" : 
+                                   CurrentSort == "name_asc" ? null : "name_desc";
+        public string? LeaderSort => CurrentSort == "leader_desc" ? "leader_asc" :
+                                     CurrentSort == "leader_asc" ? null : "leader_desc";
 
         // для поиска
         public string? NameFilter { get; set; }
